@@ -1,21 +1,25 @@
 import csv
 import os
+from typing import Optional
 
 import requests
 from bs4 import BeautifulSoup
 
 
-def _get_html(url: str):
+def _get_html(url: str) -> Optional[str]:
     """
     Take url address and returns response's content in Unicode
     :param url: url address: string
-    :return: None
+    :return: string if url available or None otherwise
     """
-    r = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
-    return r.text
+    try:
+        r = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+        return r.text
+    except:
+        return None
 
 
-def _write_csv(data: dict):
+def _write_csv(data: dict) -> None:
     """
     Write data from dictionary into the file habr_top.csv
     :param data: information about article
@@ -40,7 +44,7 @@ def _write_csv(data: dict):
         )
 
 
-def _get_one_page_data(number: '0 < int <= 20', url: str):
+def _get_one_page_data(number: 'int, 0 < number <= 20', url: str) -> None:
     """
     Put information about articles from any html page into dictionary and then write into the file
     :param number: integer, 0 < int <= 20
@@ -69,7 +73,7 @@ def _get_one_page_data(number: '0 < int <= 20', url: str):
         counter += 1
 
 
-def get_habr_top(number: 'int < 1001'):
+def get_habr_top(number: 'int, number < 1001') -> None:
     """
     Get number of articles and write into the file habr_top.csv information about these articles
     :param number: number of articles to be displayed
